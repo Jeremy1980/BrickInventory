@@ -3,8 +3,8 @@ unit searchset;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, StrUtils;
+  Windows, StdCtrls, Forms, Controls, Classes, StrUtils;
+
 
 type
   TSearchSetForm = class(TForm)
@@ -13,12 +13,14 @@ type
     ListBox1: TListBox;
     Button1: TButton;
     Button2: TButton;
+    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure ListBox1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure Edit1KeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     FList: TStringList;
@@ -33,7 +35,7 @@ implementation
 {$R *.dfm}
 
 uses
-  bi_db, bi_globals;
+  bi_delphi, bi_db, bi_globals;
 
 function GetSetID(var setid: string): boolean;
 var
@@ -78,6 +80,11 @@ end;
 procedure TSearchSetForm.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   if (Key = #27) then Close;
+end;
+
+procedure TSearchSetForm.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key in eSpecialChars) then Key := #0;
 end;
 
 procedure TSearchSetForm.Edit1KeyUp(Sender: TObject; var Key: Word;

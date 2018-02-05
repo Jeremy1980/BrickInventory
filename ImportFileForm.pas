@@ -81,7 +81,6 @@ begin
             partType:= Trim(partData[f.ComboBox1.itemIndex]);
             case source of
               stBrickLink: partPrefix:= BLDATATYPE +' ';
-              stRebrickable: partType:= db.RebrickablePart(partType);
             end;
             csvLine:= partPrefix+partType+','+
                 partPrefix+Trim(partData[f.ComboBox2.itemIndex])+','+

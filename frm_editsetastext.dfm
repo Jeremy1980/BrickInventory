@@ -617,8 +617,8 @@ object EditSetAsTextForm: TEditSetAsTextForm
           object txtPart: TEdit
             Left = 8
             Top = 8
-            Width = 121
-            Height = 20
+            Width = 161
+            Height = 21
             Ctl3D = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
@@ -632,19 +632,20 @@ object EditSetAsTextForm: TEditSetAsTextForm
             OnKeyPress = txtPartKeyPress
           end
           object boxColor: TComboBox
-            Left = 128
+            Left = 168
             Top = 8
             Width = 145
             Height = 21
+            BevelKind = bkTile
             Ctl3D = False
             ParentCtl3D = False
             TabOrder = 1
           end
           object txtNum: TEdit
-            Left = 272
+            Left = 313
             Top = 8
             Width = 121
-            Height = 20
+            Height = 21
             Ctl3D = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
@@ -659,7 +660,7 @@ object EditSetAsTextForm: TEditSetAsTextForm
           end
           object btnAdd: TButton
             Left = 440
-            Top = 8
+            Top = 7
             Width = 75
             Height = 25
             Caption = 'Add'
@@ -667,7 +668,7 @@ object EditSetAsTextForm: TEditSetAsTextForm
             OnClick = btnAddClick
           end
           object btnModify: TButton
-            Left = 512
+            Left = 521
             Top = 8
             Width = 75
             Height = 25
@@ -827,7 +828,8 @@ object EditSetAsTextForm: TEditSetAsTextForm
     DefaultExt = 'csv'
     Filter = 
       'BrickLink CSV (Tab-Delimeted file)|*.csv;*.txt|Rebrickable CSV (' +
-      'Comma-Delimeted file)|*.csv;*.txt|LDCad PBG (Parts Bin)|*.pbg'
+      'Comma-Delimeted file)|*.csv;*.txt|LDCad PBG (Parts Bin)|*.pbg|LD' +
+      'raw Model|*.mpd;*.ldr'
     Options = [ofReadOnly, ofPathMustExist, ofFileMustExist, ofNoNetworkButton]
     Title = 'Import File'
     Left = 32

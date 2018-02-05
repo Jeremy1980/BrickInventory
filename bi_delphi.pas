@@ -185,6 +185,8 @@ const
   sFromCurrent = soFromCurrent;
   sFromEnd = soFromEnd;
 
+  eSpecialChars = [',','.',PathDelim,'!','@','#','$','%','^','&','*','''','"',';','_','(',')',':','|','[',']'];
+
 {type
   TStream = class
   protected

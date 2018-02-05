@@ -281,7 +281,7 @@ begin
 
   try
     FDownload:= TStringList.Create;
-    webPages:= TStringList.Create; 
+    webPages:= TStringList.Create;
     altmodels:= TStringList.Create;
     streams := TStringList.Create;
     entries := TStringList.Create;
@@ -344,7 +344,7 @@ begin
       Onlineaccess1.Add(mnu);
     end;
   except
-    on E : Exception do I_Error('APP_FormCreate(): '+E.ClassName+' say: '+E.Message);
+    on E : Exception do I_Error('APP_FormCreate()' ,E);
   end;
 end;
 
@@ -1048,7 +1048,7 @@ begin
     PAK_AddFile('main.zip');
     PAK_GetEntries(entries);
   except
-    on E : Exception do I_Error('PAK_InitFileSystem(): '+E.ClassName+' say: '+E.Message);
+    on E : Exception do I_Error('PAK_InitFileSystem()' ,E);
   end;
 
   try
@@ -1068,7 +1068,7 @@ begin
     orders.LoadFilesDirectory(basedefault + 'orders');
     goback.AddObject('home', TScrollPos.Create(0, 0));
   except
-    on E : Exception do I_Error('APP_Database: '+E.ClassName+' say: '+E.Message);
+    on E : Exception do I_Error('APP_Database' ,E);
   end;
 
   try
@@ -1105,7 +1105,7 @@ begin
       db.UpdateExtraInfos(altmodels);
     end;
   except
-    on E : Exception do I_Error('APP_Connections: '+E.ClassName+' say: '+E.Message);
+    on E : Exception do I_Error('APP_Connections' ,E);
   end;
 end;
 
@@ -1419,7 +1419,7 @@ begin
   begin
     inc(aa);
     scolor := itoa(brick.Color);
-    document.write('<tr bgcolor=' + TBGCOLOR + '><td width=5% align=right>' + IntToStr(aa) + '.</td><td width=35%><img width=90 src=' + scolor + '\' + brick.part + '.png><br><b>');
+    document.write('<tr bgcolor=' + TBGCOLOR + '><td width=5% align=right>' + IntToStr(aa) + '.</td><td width=35%><img height=60 src=' + scolor + '\' + brick.part + '.png><br><b>');
     document.write('<a href=spiece/' + brick.part + '>' + brick.part + '</a></b>');
     document.write(' - ' + db.PieceDesc(brick.part) + '</td><td width=20%>');
     document.BlancColorCell(db.colors(brick.color).RGB, 25);
@@ -1699,7 +1699,11 @@ begin
   inv := db.GetSetInventory(setid);
   if inv = nil then
   begin
-    DrawHeadLine(Format('Can not find inventory for %s <a href=refreshset/%s><img src=images\refresh.png></a> <a href=editset/%s><img src=images\edit.png></a>' ,[setid,setid,setid]));
+    s1:= db.GetDesc(setid); i:= db.GetYear(setid);
+    if i > MINYEAR then s2:= ' ['+intToStr(i)+']' else s2:='';
+    if (s1='') then s2:='' else s2:= s2+'<br><br>';
+           
+    DrawHeadLine(Format('%s%s Can not find inventory for %s <a href=refreshset/%s><img src=images\refresh.png></a> <a href=editset/%s><img src=images\edit.png></a>' ,[s1,s2,setid,setid,setid]));
     document.write('<br>');
     document.write('</p>');
     document.write('</div>');

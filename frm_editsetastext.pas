@@ -159,9 +159,7 @@ end;
 procedure TEditSetAsTextForm.txtNumKeyPress(Sender: TObject;
   var Key: Char);
 begin
-  if not (Key in [#8, '0'..'9', FormatSettings.DecimalSeparator]) then begin
-    Key := #0;
-  end
+  if not (Key in [#8, '0'..'9', FormatSettings.DecimalSeparator]) then Key := #0;
 end;
 
 procedure TEditSetAsTextForm.FormDestroy(Sender: TObject);
@@ -226,9 +224,10 @@ begin
        then source:= sourcetype_t(ordValue)
        else source:= stBrickLink;
 
-      if source = stLDCad
-        then Memo1.Lines.Add( LDCadToCSV(OpenDialog1.FileName) )
-        else if GetDataFromFile(OpenDialog1.FileName, source, data) then
+      if source = stLDraw
+       then Memo1.Lines.Add(LDrawToCSV(OpenDialog1.FileName))
+       else if source = stLDCad then Memo1.Lines.Add(LDCadToCSV(OpenDialog1.FileName))
+       else if GetDataFromFile(OpenDialog1.FileName, source, data) then
           Memo1.Lines.AddStrings(data);
     finally
       data.Free;

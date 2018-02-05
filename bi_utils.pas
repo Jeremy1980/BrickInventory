@@ -56,7 +56,9 @@ function LastPos(SubStr, S: string): Integer;
 { Create URI from template replace text between two % }
 function AbsoluteURI(const template, filename, color: string): string;
 function GetHost(s: string): string;
+{ Covert to file content to iner format }
 function LDCadToCSV(const filename: string): string;
+function LDrawToCSV(const filename: string): string;
 
 
 implementation
@@ -89,7 +91,52 @@ begin
     end;
   finally
     str.Free;
-  end;    
+  end;
+end;
+
+function LDrawToCSV(const filename: string): string;
+var
+  str,ctx,inv: TStrings;
+  color,part,data,extension: string;
+  i,n,l: integer;
+begin
+  Result:= '';
+  str:= TStringList.Create;  // single line in file
+  ctx:= TStringList.Create;  // content of file
+  inv:= TStringList.Create;  // inventory part,color:count
+
+  if FileExists(filename) then
+  try
+    ctx.LoadFromFile(filename);
+    inv.NameValueSeparator:=',';
+    for i:= 0 to ctx.Count-1 do begin
+      ctx[i]:= ReplaceWhiteSpace(ctx[i] ,#32 ,false);
+      str.Clear;
+      ExtractStrings([#32] ,[] ,PWideChar(ctx[i]) ,str);
+
+      if (str.Count > 2) then begin
+        color:= str[1]; part:=TrimRight(str[str.Count-1]);
+        extension:= ExtractFileExt(part);
+        if (str[0]='1') and (extension='.dat') then begin
+          part:= Copy(part,1,Length(part)-Length(extension));
+          data:= part+inv.NameValueSeparator+color;
+          n:= inv.IndexOf(data);
+          if n = -1
+            then inv.AddObject(data,TObject(1))
+            else begin
+              l:= integer(inv.Objects[n]) +1;
+              inv.Objects[n]:= TObject(l);
+            end;
+        end;
+      end;
+    end;
+     for i:= 0 to inv.Count-1 do
+        Result:= Format('%s%s, %d%s',[Result ,inv.Strings[i] ,integer(inv.Objects[i]) ,sLineBreak]);
+  finally
+     FreeAndNil(ctx);
+     FreeAndNil(str);
+     FreeAndNil(inv);
+  end;
 end;
 
 function CountChars(const S: string; const C: char): integer;
@@ -167,7 +214,7 @@ var
   InvalidChars : set of char;
 
 begin
-  InvalidChars := [',','.',PathDelim,'!','@','#','$','%','^','&','*','''','"',';','_','(',')',':','|','[',']'];
+  InvalidChars := eSpecialChars;
   if numericOnly then InvalidChars := InvalidChars +AlphaChars +[' '] - [FormatSettings.DecimalSeparator];
 
   SetLength(Result, Length(str));
@@ -563,7 +610,7 @@ begin
     except
       on E : Exception do begin
         Result := False;
-        printf(#9'Failed. '+E.Message);
+        printf(#9'Failed. '+ReplaceWhiteSpace(E.Message,' ',true));
       end;
     end;
   finally

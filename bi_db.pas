@@ -15,7 +15,7 @@ const
   MINYEAR = 1932;
 
 type
-  sourcetype_t = (stUnsuported, stBrickLink ,stRebrickable ,stLDCad);
+  sourcetype_t = (stUnsuported ,stBrickLink ,stRebrickable ,stLDCad ,stLDraw);
 
   colorinfo_t = record
     id: integer;
@@ -2782,6 +2782,7 @@ var
                 progressfunc('Initializing sets...', i / s.Count);
 
           stmp := s.Strings[i];
+
           p := Pos(',', stmp);
           if p > 0 then
           begin

@@ -4,8 +4,8 @@ object SearchSetForm: TSearchSetForm
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Search Set'
-  ClientHeight = 395
-  ClientWidth = 257
+  ClientHeight = 442
+  ClientWidth = 271
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -565,20 +565,41 @@ object SearchSetForm: TSearchSetForm
     Font.Style = []
     ParentFont = False
   end
+  object Label2: TLabel
+    AlignWithMargins = True
+    Left = 8
+    Top = 361
+    Width = 241
+    Height = 39
+    AutoSize = False
+    Caption = 
+      'If set is not on list, probably you have partial data in databas' +
+      'e. You still can edit, or create new with desired number, after ' +
+      'press OK.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    WordWrap = True
+  end
   object Edit1: TEdit
     Left = 86
     Top = 6
-    Width = 155
+    Width = 163
     Height = 18
     Ctl3D = False
+    MaxLength = 15
     ParentCtl3D = False
     TabOrder = 0
+    OnKeyPress = Edit1KeyPress
     OnKeyUp = Edit1KeyUp
   end
   object ListBox1: TListBox
     Left = 12
     Top = 36
-    Width = 229
+    Width = 237
     Height = 317
     Ctl3D = False
     Font.Charset = DEFAULT_CHARSET
@@ -593,8 +614,8 @@ object SearchSetForm: TSearchSetForm
     OnClick = ListBox1Click
   end
   object Button1: TButton
-    Left = 54
-    Top = 366
+    Left = 46
+    Top = 415
     Width = 56
     Height = 19
     Caption = 'OK'
@@ -603,8 +624,8 @@ object SearchSetForm: TSearchSetForm
     TabOrder = 2
   end
   object Button2: TButton
-    Left = 132
-    Top = 366
+    Left = 124
+    Top = 415
     Width = 56
     Height = 19
     Caption = 'Cancel'

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
   Left = 476
   Top = 251
-  Caption = 'Bricks Inventory'
+  Caption = 'Brick Inventory'
   ClientHeight = 422
   ClientWidth = 854
   Color = clBtnFace
@@ -557,11 +557,12 @@ object MainForm: TMainForm
   TextHeight = 12
   object Splitter1: TSplitter
     Left = 0
-    Top = 273
+    Top = 321
     Width = 854
     Height = 3
     Cursor = crVSplit
     Align = alBottom
+    ExplicitTop = 273
   end
   object Bevel1: TBevel
     Left = 0
@@ -573,9 +574,9 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 0
-    Top = 276
+    Top = 324
     Width = 854
-    Height = 146
+    Height = 98
     Align = alBottom
     BevelOuter = bvNone
     Caption = ' '
@@ -584,7 +585,7 @@ object MainForm: TMainForm
       Left = 0
       Top = 0
       Width = 854
-      Height = 146
+      Height = 98
       Align = alClient
       Color = 12648447
       Ctl3D = False
@@ -606,7 +607,7 @@ object MainForm: TMainForm
     Left = 0
     Top = 41
     Width = 854
-    Height = 232
+    Height = 280
     BorderStyle = htNone
     DefBackground = clWhite
     DefFontName = 'Tahoma'

@@ -2,6 +2,8 @@ unit bi_system;
 
 interface
 
+Uses SysUtils;
+
 procedure I_Init;
 
 procedure I_Quit;
@@ -11,6 +13,8 @@ procedure I_FlashCachedOutput;
 procedure I_Error(const error: string; const Args: array of const); overload;
 
 procedure I_Error(const error: string); overload;
+
+procedure I_Error(const source: string; E: Exception); overload;
 
 procedure I_Warning(const warning: string; const Args: array of const); overload;
 
@@ -68,7 +72,7 @@ const
 implementation
 
 uses
-  Windows, Messages, bi_delphi, bi_io, bi_tmp, main;
+  Windows, Messages, bi_delphi, bi_utils, bi_io, bi_tmp, main;
 
 //
 // I_GetTime
@@ -151,6 +155,15 @@ end;
 //
 var
   in_i_error: boolean = false;
+
+procedure I_Error(const source: string; E: Exception);
+begin
+// JVAL: Avoid recursive calls
+  if stderr = nil then
+    Exit;
+
+  fprintf(stderr, '%s: %s say %s', [source,E.ClassName,ReplaceWhiteSpace(E.Message,' ',true)]);
+end;
 
 procedure I_Error(const error: string; const Args: array of const);
 var
@@ -495,33 +508,55 @@ begin
   WaitForSingleObject(pid, msec);
 end;
 
+//
+// Shell
+//
 type
   shellexecute_t = function (hWnd: HWND; Operation, FileName, Parameters,
-    Directory: PChar; ShowCmd: Integer): HINST; stdcall;
+    Directory: PWideChar; ShowCmd: Integer): HINST; stdcall;
+
+var
+  shellInstance: THandle;
+
+function I_Shell: THandle;
+const
+  nBufferLength = 512;
+var
+  filePath, fileName: PWideChar;
+begin
+  filePath := StrAlloc(nBufferLength);
+  try
+    searchPath(nil , 'shell32' , '.dll' , nBufferLength , filePath , fileName);
+  finally
+    Result := LoadLibrary(filePath);
+    StrDispose(filePath);
+  end;
+end;
 
 //
 // JVAL
 // Dynamically get ShellExecute function to avoid malicius detection of
 // some antivirus programs
-//     
+//
 procedure I_GoToWebPage(const cmd: string);
 var
   shellexecutefunc: shellexecute_t;
-  inst: THandle;
 begin
-  inst := LoadLibrary('shell32');
-  shellexecutefunc := GetProcAddress(inst, 'ShellExecuteA');
-  shellexecutefunc(0, 'open', PChar(cmd), nil, nil, SW_SHOWNORMAL);
-  FreeLibrary(inst);
+  shellexecutefunc := GetProcAddress(shellInstance, 'ShellExecuteW');
+  shellexecutefunc(GetDesktopWindow(), 'open', PWideChar(cmd), nil, nil, SW_SHOWNORMAL);
 end;
 
 initialization
   basetime := 0;
+  shellInstance:= I_Shell;
 
   if not QueryPerformanceFrequency(Freq) then
     Freq := 1000;
 
   hThread := GetCurrentThread;
+
+finalization
+  FreeLibrary(shellInstance);
 
 end.
 
