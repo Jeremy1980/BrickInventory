@@ -15,8 +15,6 @@ type
     Label5: TLabel;
     Label2: TLabel;
     Label1: TLabel;
-    Panel1: TPanel;
-    Label4: TLabel;
   private
     { Private declarations }
   public
@@ -78,10 +76,7 @@ begin
   try
     f.Label1.Caption := db.PieceDesc(part);
     f.Label2.Visible := true;
-    f.Label4.Visible := true;
     f.Label5.Visible := true;
-    f.Panel1.Visible := true;
-    f.Label4.Caption := db.colors(color).name;
     f.Edit1.Text := itoa(num);
     if num = 1 then
       f.Label2.Caption := 'piece from storage ' + storage + '?'
@@ -91,7 +86,6 @@ begin
     PieceToImage(f.Image1, part, color);
     if pci <> nil then
     begin
-      f.Panel1.Color := RGBInvert(db.colors(color).RGB);
       f.ShowModal;
       if f.ModalResult = mrOK then
       begin

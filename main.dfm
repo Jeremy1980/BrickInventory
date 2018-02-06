@@ -1392,10 +1392,6 @@ object MainForm: TMainForm
     end
     object S1: TMenuItem
       Caption = 'System'
-      object Batchlink1: TMenuItem
-        Caption = 'Batch link processing...'
-        OnClick = Batchlink1Click
-      end
       object Reloadcache1: TMenuItem
         Caption = 'Reload cache'
         OnClick = Reloadcache1Click

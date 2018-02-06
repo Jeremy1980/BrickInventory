@@ -577,7 +577,7 @@ object SplashForm: TSplashForm
       Align = alTop
       Alignment = taCenter
       Caption = 'Brick Inventory'
-      Color = clMoneyGreen
+      Color = clSilver
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -19
@@ -585,6 +585,8 @@ object SplashForm: TSplashForm
       Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
+      Transparent = False
+      ExplicitWidth = 148
     end
     object ProgressBar1: TProgressBar
       Left = 18

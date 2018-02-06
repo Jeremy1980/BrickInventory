@@ -1,9 +1,9 @@
 object RemovePieceFromStorageForm: TRemovePieceFromStorageForm
   Left = 490
   Top = 268
-  Width = 553
-  Height = 260
   Caption = 'Remove piece from storage'
+  ClientHeight = 156
+  ClientWidth = 498
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -553,38 +553,23 @@ object RemovePieceFromStorageForm: TRemovePieceFromStorageForm
   end
   object Label5: TLabel
     Left = 16
-    Top = 144
+    Top = 128
     Width = 42
     Height = 13
     Caption = 'Remove '
   end
   object Label2: TLabel
     Left = 128
-    Top = 144
+    Top = 128
     Width = 103
     Height = 13
     Caption = 'pieces from storage? '
   end
   object Label1: TLabel
     Left = 142
-    Top = 16
+    Top = 8
     Width = 345
-    Height = 81
-    AutoSize = False
-    Caption = '       '
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    WordWrap = True
-  end
-  object Label4: TLabel
-    Left = 176
-    Top = 96
-    Width = 313
-    Height = 25
+    Height = 105
     AutoSize = False
     Caption = '       '
     Font.Charset = DEFAULT_CHARSET
@@ -596,8 +581,8 @@ object RemovePieceFromStorageForm: TRemovePieceFromStorageForm
     WordWrap = True
   end
   object Button1: TButton
-    Left = 340
-    Top = 176
+    Left = 252
+    Top = 123
     Width = 75
     Height = 25
     Caption = 'OK'
@@ -605,8 +590,8 @@ object RemovePieceFromStorageForm: TRemovePieceFromStorageForm
     TabOrder = 0
   end
   object Button2: TButton
-    Left = 252
-    Top = 176
+    Left = 356
+    Top = 123
     Width = 75
     Height = 25
     Cancel = True
@@ -616,7 +601,7 @@ object RemovePieceFromStorageForm: TRemovePieceFromStorageForm
   end
   object Edit1: TEdit
     Left = 64
-    Top = 144
+    Top = 128
     Width = 57
     Height = 19
     BiDiMode = bdLeftToRight
@@ -625,13 +610,5 @@ object RemovePieceFromStorageForm: TRemovePieceFromStorageForm
     ParentCtl3D = False
     TabOrder = 2
     Text = '0'
-  end
-  object Panel1: TPanel
-    Left = 136
-    Top = 96
-    Width = 33
-    Height = 33
-    Caption = ' '
-    TabOrder = 3
   end
 end

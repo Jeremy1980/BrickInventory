@@ -8,10 +8,11 @@ uses
 
 const
   SPECIALCHARS : set of char = ['.','/','!','@','#','$','%','^','&','*','''','"',';','_','(',')',':','|','[',']'];
-  BLDATATYPE: string = 'BL';
+  BLDATATYPE = 'BL';
+  BLHOST = 'bricklink.com';
   MAXBRICKLINKCOLOR = 256;
   MAXINFOCOLOR = 9999;
-  NOACTIONCAPTION: string = 'Nothing to do';
+  NOACTIONCAPTION = 'Nothing to do';
   MINYEAR = 1932;
 
 type

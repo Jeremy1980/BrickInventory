@@ -145,9 +145,6 @@
         <DCCReference Include="bl_orderxml.pas"/>
         <DCCReference Include="bi_orders.pas"/>
         <DCCReference Include="bi_threads.pas"/>
-        <DCCReference Include="Gopage.pas">
-            <Form>GoPageForm</Form>
-        </DCCReference>
         <DCCReference Include="bi_currency.pas"/>
         <DCCReference Include="compare2sets.pas">
             <Form>Compare2SetsForm</Form>
@@ -163,9 +160,6 @@
         <DCCReference Include="bi_priceadjust.pas"/>
         <DCCReference Include="frm_selectsets.pas">
             <Form>SelectSetsForm</Form>
-        </DCCReference>
-        <DCCReference Include="frm_batch.pas">
-            <Form>BatchLinkForm</Form>
         </DCCReference>
         <DCCReference Include="removepiecefromstoragefrm.pas">
             <Form>RemovePieceFromStorageForm</Form>

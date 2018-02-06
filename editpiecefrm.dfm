@@ -547,18 +547,12 @@ object EditPieceForm: TEditPieceForm
   OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
-  object Image1: TImage
-    Left = 16
-    Top = 16
-    Width = 105
-    Height = 105
-    AutoSize = True
-  end
   object Label1: TLabel
     Left = 136
     Top = 16
     Width = 345
-    Height = 81
+    Height = 50
+    Alignment = taRightJustify
     AutoSize = False
     Caption = '       '
     Font.Charset = DEFAULT_CHARSET
@@ -578,16 +572,16 @@ object EditPieceForm: TEditPieceForm
     FocusControl = Edit1
   end
   object SpeedButton1: TSpeedButton
-    Left = 216
-    Top = 248
+    Left = 255
+    Top = 246
     Width = 23
     Height = 22
     Caption = '+'
     OnClick = SpeedButton1Click
   end
   object SpeedButton2: TSpeedButton
-    Left = 240
-    Top = 248
+    Left = 284
+    Top = 246
     Width = 23
     Height = 22
     Caption = '-'
@@ -601,10 +595,11 @@ object EditPieceForm: TEditPieceForm
     Caption = 'Storage: '
   end
   object Label4: TLabel
-    Left = 176
-    Top = 96
-    Width = 313
+    Left = 269
+    Top = 72
+    Width = 212
     Height = 25
+    Alignment = taRightJustify
     AutoSize = False
     Caption = '       '
     Font.Charset = DEFAULT_CHARSET
@@ -626,15 +621,15 @@ object EditPieceForm: TEditPieceForm
   object Label5: TLabel
     Left = 32
     Top = 216
-    Width = 89
+    Width = 99
     Height = 13
-    Caption = 'Bricklink www link: '
+    Caption = 'Bricklink Crawler link:'
     FocusControl = LinkEdit
   end
   object Edit1: TEdit
-    Left = 96
+    Left = 136
     Top = 248
-    Width = 121
+    Width = 113
     Height = 19
     BiDiMode = bdLeftToRight
     Ctl3D = False
@@ -673,14 +668,6 @@ object EditPieceForm: TEditPieceForm
     ModalResult = 2
     TabOrder = 7
   end
-  object Panel1: TPanel
-    Left = 136
-    Top = 96
-    Width = 33
-    Height = 33
-    Caption = ' '
-    TabOrder = 8
-  end
   object AliasEdit: TEdit
     Left = 312
     Top = 184
@@ -711,12 +698,30 @@ object EditPieceForm: TEditPieceForm
     OnClick = AutodetectButtonClick
   end
   object LinkEdit: TEdit
-    Left = 128
+    Left = 137
     Top = 216
-    Width = 305
+    Width = 296
     Height = 19
     Ctl3D = False
     ParentCtl3D = False
     TabOrder = 3
+  end
+  object Panel1: TPanel
+    Left = 16
+    Top = 16
+    Width = 105
+    Height = 105
+    BevelKind = bkTile
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 8
+    object Image1: TImage
+      Left = 0
+      Top = 0
+      Width = 105
+      Height = 105
+      Center = True
+      Proportional = True
+    end
   end
 end

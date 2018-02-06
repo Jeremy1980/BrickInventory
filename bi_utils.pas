@@ -29,14 +29,9 @@ procedure PieceToImage(const img: TImage; const piece: string; color: integer = 
 
 function filenamestring(const s: string): string;
 
-
 procedure backupfile(const fname: string);
 
 function DownloadFile(SourceFile, DestFile: string): Boolean;
-
-function DownloadJpgFileToPNG(SourceFile, DestFile: string): Boolean;
-
-function DownloadGIFFileToPNG(SourceFile, DestFile: string): Boolean;
 
 procedure SetClipboardTextWideString(const Text: WideString);
 
@@ -492,6 +487,7 @@ var
   tmp: string;
   s1, s2: string;
 begin
+  try
   if color = -1 then
     path := 's\'
   else
@@ -528,21 +524,26 @@ begin
     ps := TPakStream.Create(sTmp, pm_full);
     if ps.IOResult <> 0 then
     begin
-      ps.Free;
+      FreeAndNil(ps);
       exit;
     end;
   end;
 
   m := TMemoryStream.Create;
   m.LoadFromStream(ps);
-  ps.Free;
+  FreeAndNil(ps);
 
-  splitstringex(path, s1, s2, '\');
-  tmp := I_NewTempFile(s2);
-  m.SaveToFile(tmp);
-  m.Free;
-  img.Picture.LoadFromFile(tmp);
-
+  try
+    splitstringex(path, s1, s2, '\');
+    tmp := I_NewTempFile(s2);
+    m.SaveToFile(tmp);
+  finally
+    img.Picture.LoadFromFile(tmp);
+    FreeAndNil(m);
+  end;
+  except
+    on E : Exception do printf('I_PieceToImage(): ' +E.Message);
+  end;
 end;
 
 function filenamestring(const s: string): string;
@@ -599,6 +600,7 @@ var
 begin
   Result:= True;
   TH:= TIdHTTP.Create(nil);
+  TH.ConnectTimeout := 15000;
   TH.Request.UserAgent :=
       'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0';
   FS:= TFileStream.Create(DestFile, fmCreate);
@@ -641,73 +643,6 @@ begin
   end;
 end;
 
-function DownloadJpgFileToPNG(SourceFile, DestFile: string): Boolean;
-var
-  J: TJpegImage;
-  B: TBitmap;
-  P: TPNGObject;
-begin
-  result := DownloadFile(SourceFile, 'tmp1.jpg');
-  if not result then
-  begin
-    if FileExists('tmp1.jpg') then
-      DeleteFile('tmp1.jpg');
-    exit;
-  end;
-
-  result := true;
-  J := TJpegImage.Create;
-  B := TBitmap.Create;
-  P := TPNGObject.Create;
-  try
-    J.LoadFromFile('tmp1.jpg');
-    B.Assign(J);
-    P.Assign(B);
-    P.SaveToFile(DestFile);
-  except
-    result := false;
-  end;
-  J.Free;
-  B.Free;
-  P.Free;
-
-  if FileExists('tmp1.jpg') then
-    DeleteFile('tmp1.jpg');
-end;
-
-function DownloadGIFFileToPNG(SourceFile, DestFile: string): Boolean;
-var
-  J: TGIFImage;
-  B: TBitmap;
-  P: TPNGObject;
-begin
-  result := DownloadFile(SourceFile, 'tmp1.gif');
-  if not result then
-  begin
-    if FileExists('tmp1.gif') then
-      DeleteFile('tmp1.gif');
-    exit;
-  end;
-
-  result := true;
-  J := TGIFImage.Create;
-  B := TBitmap.Create;
-  P := TPNGObject.Create;
-  try
-    J.LoadFromFile('tmp1.gif');
-    B.Assign(J);
-    P.Assign(B);
-    P.SaveToFile(DestFile);
-  except
-    result := false;
-  end;
-  J.Free;
-  B.Free;
-  P.Free;
-
-  if FileExists('tmp1.gif') then
-    DeleteFile('tmp1.gif');
-end;
 
 function GetFileCreationTime(sFileName: string): TDateTime;
 var

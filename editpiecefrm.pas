@@ -8,7 +8,6 @@ uses
 
 type
   TEditPieceForm = class(TForm)
-    Image1: TImage;
     Label1: TLabel;
     Label2: TLabel;
     Edit1: TEdit;
@@ -19,13 +18,14 @@ type
     Button1: TButton;
     Button2: TButton;
     Label4: TLabel;
-    Panel1: TPanel;
     AliasLabel: TLabel;
     AliasEdit: TEdit;
     Edit2: TEdit;
     AutodetectButton: TButton;
     LinkEdit: TEdit;
     Label5: TLabel;
+    Panel1: TPanel;
+    Image1: TImage;
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -63,7 +63,6 @@ begin
       f.Label3.Visible := false;
       f.Label4.Visible := false;
       f.Memo1.Visible := false;
-      f.Panel1.Visible := false;
       f.AliasLabel.Visible := false;
       f.AliasEdit.Visible := false;
       f.AliasEdit.Text := '';
@@ -75,7 +74,6 @@ begin
       f.Label3.Visible := true;
       f.Label4.Visible := true;
       f.Memo1.Visible := true;
-      f.Panel1.Visible := true;
       f.Label4.Caption := db.colors(color).name;
       f.AliasLabel.Visible := true;
       f.AliasEdit.Visible := true;
@@ -92,7 +90,6 @@ begin
     PieceToImage(f.Image1, part, color);
     if pci <> nil then
     begin
-      f.Panel1.Color := RGBInvert(db.colors(color).RGB);
       f.Memo1.Lines.Text := pci.storage.Text;
       num := inventory.LoosePartCount(part, color);
       f.Edit1.Text := itoa(num);

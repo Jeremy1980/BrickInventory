@@ -12,6 +12,7 @@ implementation
 
 uses
   Windows,
+  SysUtils,
   bi_delphi;
 
 var
@@ -37,12 +38,18 @@ end;
 
 function I_NewTempFile(const name: string): string;
 var
-  buf: array[0..1024] of char;
+  TmpDir: PChar;
 begin
-  ZeroMemory(@buf, SizeOf(buf));
-  GetTempPath(SizeOf(buf), buf);
-  result :=  StringVal(buf) + '\' + fname(name);
-  tempfiles.Add(result);
+  TmpDir := StrAlloc(MAX_PATH);
+  GetTempPath(MAX_PATH, TmpDir);
+  Result := StringVal(TmpDir);
+  StrDispose(TmpDir);
+
+  if Result[Length(Result)] <> '\' then
+    Result := Result + '\';
+  Result := Result + fname(name);
+
+  if Assigned(tempfiles) then tempfiles.Add(Result);
 end;
 
 end.

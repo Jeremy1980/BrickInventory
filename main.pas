@@ -38,7 +38,6 @@ type
     Missingfordismandaledsets1: TMenuItem;
     Usedsetstobuiltfromscratch1: TMenuItem;
     Weightqueries1: TMenuItem;
-    Batchlink1: TMenuItem;
     S1: TMenuItem;
     Reloadcache1: TMenuItem;
     CheckCacheHashEfficiency1: TMenuItem;
@@ -112,7 +111,6 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure Missingfordismandaledsets1Click(Sender: TObject);
     procedure Usedsetstobuiltfromscratch1Click(Sender: TObject);
-    procedure Batchlink1Click(Sender: TObject);
     procedure Reloadcache1Click(Sender: TObject);
     procedure CheckCacheHashEfficiency1Click(Sender: TObject);
     procedure Bricks1x1Click(Sender: TObject);
@@ -211,7 +209,7 @@ uses
   bi_delphi, bi_pak, bi_io, bi_system, bi_tmp, slpash, bi_utils, timing,
   searchset, searchpart, frm_multiplesets, bl_orderxml,
   compare2sets, editpiecefrm, removepiecefromstoragefrm, strutils,
-  frm_selectsets, bi_script, frm_batch,
+  frm_selectsets, bi_script,
   bi_globals, frm_editsetastext;
 
 {$R *.dfm}
@@ -854,7 +852,7 @@ var
   idx,findex: integer;
   m: TMemoryStream;
   ps: TPakStream;
-  stmp,destfile,filename: string;
+  sTmp,destfile,filename: string;
 
   function BLCOLOR1: string;
   var
@@ -914,12 +912,14 @@ begin
         
         for findex:= 0 to webPages.Count-1 do begin
           if (webPages.ValueFromIndex[findex]=cc) then
-            dresult:= DownloadFile(AbsoluteURI(webPages.Names[findex],filename,RBCOLOR1) ,destfile);
+            if Pos(BLHOST,webPages.Names[findex]) <> 0 then sTmp:= BLCOLOR1 else sTmp:=RBCOLOR1;
+
+            dresult:= DownloadFile(AbsoluteURI(webPages.Names[findex],filename,sTmp) ,destfile);
           if dresult then break;
         end;
       end;
       if not dresult then
-        FDownload.Add(filename);
+        FDownload.Add(ExtractFileName(SRC));
 
       ps := TPakStream.Create(SRC, pm_full);
       Screen.Cursor := crDefault; 
@@ -1443,7 +1443,7 @@ begin
     document.write('<td width=10% align=right>' + IntToStr(brick.num));
     if not lite then
     begin
-      document.write('<br><a href=editpiece/' + brick.part + '/' + scolor + '><img src="images\edit.png"></a>');
+      document.write('<br><a href=editpiece/' + brick.part + '/' + scolor + '> <img src="images\edit.png"></a>');
 
     end;
     document.write('</td>');
@@ -1703,7 +1703,7 @@ begin
     if i > MINYEAR then s2:= ' ['+intToStr(i)+']' else s2:='';
     if (s1='') then s2:='' else s2:= s2+'<br><br>';
            
-    DrawHeadLine(Format('%s%s Can not find inventory for %s <a href=refreshset/%s><img src=images\refresh.png></a> <a href=editset/%s><img src=images\edit.png></a>' ,[s1,s2,setid,setid,setid]));
+    DrawHeadLine(Format('%s%s Can not find inventory for %s <a href=refreshset/%s><img src=images\refresh.png></a> <a href=editset/%s> <img src=images\edit.png></a>' ,[s1,s2,setid,setid,setid]));
     document.write('<br>');
     document.write('</p>');
     document.write('</div>');
@@ -1781,7 +1781,7 @@ begin
   ss1 := Format('Inventory for %s - %s <br>(%d lots, %d parts, %d sets)<br>You have %s%d%s builted and %s%d%s dismantaled<br><img width=360 src=s\' +
       SetImageRequest(setid) + '.jpg>' +
       ' <a href=refreshset/'+setid+'><img src=images\refresh.png></a>' +
-      ' <a href=editset/'+setid+'><img src=images\edit.png></a>' +
+      ' <a href=editset/'+setid+'> <img src=images\edit.png></a>' +
       '<br>[Year: <a href=ShowSetsAtYear/%d>%d</a>]<br>',
     [setid, db.GetDesc(setid), inv.numlooseparts, inv.totallooseparts, inv.totalsetsbuilted + inv.totalsetsdismantaled,
      sf2, st.num, sf1, sf4, st.dismantaled, sf3, db.GetYear(setid), db.GetYear(setid)]);
@@ -2248,7 +2248,7 @@ begin
   + db.categories[pi.category].name + '<img src="images\colors.png"></b></a>';
   if pi.weight > 0.0 then
     DrawHeadLine(pcs + ' - ' + db.PieceDesc(pcs) + ' (' + Format('%2.2f gr', [pi.weight]) + ')'
-    + '<a href=editpiece/' + pcs + '/' + itoa(GetAPieceColor(pcs)) + '><img src="images\edit.png"></a>' + refrhtml + '<br>' + cathtml)
+    + '<a href=editpiece/' + pcs + '/' + itoa(GetAPieceColor(pcs)) + '> <img src="images\edit.png"></a>' + refrhtml + '<br>' + cathtml)
   else
     DrawHeadLine(pcs + ' - ' + db.PieceDesc(pcs) + '<a href=editpiece/' + pcs + '/'
     + itoa(GetAPieceColor(pcs)) + '><img src="images\edit.png"></a>' + refrhtml + '<br>' + cathtml);
@@ -2300,7 +2300,6 @@ begin
             document.write('<a href=spiecec/' + pcs + '/' + IntToStr(i) + '>' + db.colors(i).name + '</a> (' + IntToStr(i) + ') (BL=' + IntToStr(db.colors(i).BrickLinkColor) + ')<img src="images\details.png"></td>');
             document.write('<td width=10% align=right>' + Format('%d', [numpieces]) +
               '<br><a href=editpiece/' + pcs + '/' + itoa(i) + '><img src="images\edit.png"></a>' +
-//GFUD              '<br><a href=diagrampiece/' + pcs + '/' + itoa(i) + '><img src="images\diagram.png"></a>' +
               '</td>');
             if aa mod 5 = 0 then
               document.write('</tr>');
@@ -2359,8 +2358,7 @@ begin
             document.write('<td width=10% align=right></td>');
           end;
           document.write('<td width=15% align=right>' + Format('%d', [numpieces]) +
-            '<br><a href=editpiece/' + pcs + '/' + itoa(i) + '><img src="images\edit.png"></a>' +
-//GFUD            '<br><a href=diagrampiece/' + pcs + '/' + itoa(i) + '><img src="images\diagram.png"></a>' +
+            '<br><a href=editpiece/' + pcs + '/' + itoa(i) + '> <img src="images\edit.png"></a>' +
             '</td>');
 
           if pci <> nil then
@@ -2474,7 +2472,7 @@ begin
          decide(pci.setmost='','', '<br><a href=sinv/' + pci.setmost +'>Appears ' + itoa(pci.setmostnum) + ' times in ' + pci.setmost + '</a>') + '</td>');
 
     document.write('<td width=15% align=right>' + Format('%d', [numpieces]) +
-            '<br><a href=editpiece/' + pcs + '/' + itoa(cl) + '><img src="images\edit.png"></a>' +
+            '<br><a href=editpiece/' + pcs + '/' + itoa(cl) + '> <img src="images\edit.png"></a>' +
             '</td>');
 
     pi := db.PieceInfo(pcs);
@@ -2589,7 +2587,7 @@ begin
       document.write('<a href=spiecec/' + pcs + '/' + col + '>' + db.colors(cl).name + '</a> (' + col + ') (BL=' + IntToStr(db.colors(cl).BrickLinkColor) + ')<img src="images\details.png">' +
          decide(pci.setmost='','', '<br><a href=sinv/' + pci.setmost +'>Appears ' + itoa(pci.setmostnum) + ' times in ' + pci.setmost + '</a>') + '</td>');
     document.write('<td width=15% align=right>' + Format('%2.3f', [decided(pci = nil, 0.0, pci.nDemand)]) +
-            '<br><a href=editpiece/' + pcs + '/' + itoa(cl) + '><img src="images\edit.png"></a>' +
+            '<br><a href=editpiece/' + pcs + '/' + itoa(cl) + '> <img src="images\edit.png"></a>' +
             '</td>');
 
     if pci <> nil then
@@ -2712,7 +2710,7 @@ begin
     stmp := '';
 
   DrawHeadLine('<a href=spiece/' + pcs + '>' + pcs + '</a> - ' + db.Colors(color).name + ' ' + db.PieceDesc(pcs) +
-    ' <a href=editpiece/' + pcs + '/' + itoa(color) + '><img src="images\edit.png"></a>' +
+    ' <a href=editpiece/' + pcs + '/' + itoa(color) + '> <img src="images\edit.png"></a>' +
     '<br><br><img src=' + IntToStr(color) + '\' + pcs + '.png>' + stmp);
 
   document.write('<table width=99% bgcolor=' + TBGCOLOR + ' border=2>');
@@ -3845,7 +3843,7 @@ begin
         document.write('<td width=10% align=right></td>');
 
       document.write('<td width=15% align=right>' + IntToStr(brick.num) +
-      '<br><a href=editpiece/' + brick.part + '/' + scolor + '><img src="images\edit.png"></a>' +
+      '<br><a href=editpiece/' + brick.part + '/' + scolor + '> <img src="images\edit.png"></a>' +
       '</td>');
       pi := db.PieceInfo(brick.part);
       if pci <> nil then
@@ -4705,8 +4703,7 @@ begin
     document.write(' <a href=sp iecec/' + spart + '/' + scolor + '><img src="images\details.png"></a></td>');
 
     document.write('<td width=10% align=right><b>' + IntToStr(num) + '</b>');
-    document.write('<br><a href=editpiece/' + spart + '/' + scolor + '><img src="images\edit.png"></a>');
-//GFUD    document.write('<br><a href=diagrampiece/' + spart + '/' + scolor + '><img src="images\diagram.png"></a>');
+    document.write('<br><a href=editpiece/' + spart + '/' + scolor + '> <img src="images\edit.png"></a>');
     document.write('</td>');
 
     document.write('<td width=25% align=right><b>' + IntToStr(num * len) + '</b><br>');
@@ -5145,23 +5142,6 @@ var
   unused: Boolean;
 begin
   HTMLClick('ShowSetsForPartInUsed/150', unused);
-end;
-
-procedure TMainForm.Batchlink1Click(Sender: TObject);
-var
-  s: TStringList;
-  i: integer;
-  unused: boolean;
-begin
-  s := TStringList.Create;
-  if GetBatchLinks(s) then
-  begin
-    Screen.Cursor := crHourglass;
-    for i := 0 to s.Count - 1 do
-      HTMLClick(s.Strings[i], unused);
-    Screen.Cursor := crDefault;
-  end;
-  s.Free;
 end;
 
 procedure TMainForm.StoreInventoryStatsRec(const piece: string; const color: string = '');
